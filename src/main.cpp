@@ -15,13 +15,13 @@ public:
 
   void row(int rowNum, float* out) {
     for (int i = 0; i < outSize; i++) {
-      out[i] = outSize * rowNum + i;
+      out[i] = data[outSize * rowNum + i];
     }
   }
 
   void col(int colNum, float* out) {
     for (int i = 0; i < inSize; i++) {
-      out[i] = outSize * i + colNum;
+      out[i] = data[outSize * i + colNum];
     }
   }
 
@@ -45,6 +45,8 @@ void innerProduct(float* x, float* y, float* out, size_t dim)  {
   // We pass in dim because sizeof(x) / sizeof(x[0]) doesn't work here..
   // x is construed as the pointer pointing to x[0] in function scope
   for (int i = 0; i < dim; i++) {
+    cout << "row element i " << x[i] << endl;
+    cout << "col element i " << y[i] << endl;
     *out += x[i] * y[i]; 
   }
 }
@@ -57,6 +59,8 @@ void matMul(Matrix* A, Matrix* B, Matrix* out) {
   size_t inDim = A->inSize;
   size_t outDim = B->outSize;
   size_t innerDim = A->outSize;
+  out->inSize = inDim;
+  out->outSize = outDim;
   float row[A->outSize];
   float col[B->inSize];
 
@@ -65,12 +69,11 @@ void matMul(Matrix* A, Matrix* B, Matrix* out) {
     A->row(i, row);
     for (int j = 0; j < outDim; j++) {
       B->col(j, col);
+      cout << "row " << i << endl;
+      cout << "col " << j << endl;
       innerProduct(row, col, out->get(i,j), innerDim);
     }
   }
-
-  out->inSize = inDim;
-  out->outSize = outDim;
 } 
 
 int main() {
@@ -105,6 +108,9 @@ int main() {
   float dataB[6] = {1, 0.5, 2, 1, 3, 1};
   B->data = dataB;
 
+  float dataC[4] = {0, 0, 0, 0};
+  C->data = dataC;
+
   matMul(A, B, C);
   float target[2][2] = { {16, 6}, {8.5, 4} };
   bool passed = true;
@@ -127,13 +133,14 @@ int main() {
         cout << target[i][j] << ", ";
       }
     }
-    cout << target << endl;
+    cout << "" << endl;
     cout << "Computed: " << endl;
     for (int i = 0; i < 2; i++) {
       for (int j = 0; j < 2; j++) {
         cout << *(C->get(i,j)) << ", ";
       }
     }
+    cout << "" << endl;
   }
 
   delete A;
