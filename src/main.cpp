@@ -1,80 +1,6 @@
 #include <iostream>
-
-using namespace std;
-
-class Matrix {
-
-public:
-  size_t inSize;
-  size_t outSize;
-  float* data;
-
-  float* get(int row, int col) {
-    return &(data[row * outSize + col]);
-  }
-
-  void row(int rowNum, float* out) {
-    for (int i = 0; i < outSize; i++) {
-      out[i] = data[outSize * rowNum + i];
-    }
-  }
-
-  void col(int colNum, float* out) {
-    for (int i = 0; i < inSize; i++) {
-      out[i] = data[outSize * i + colNum];
-    }
-  }
-
-  // void T() {
-  //   // Transpose the matrix
-  //   size_t holder = inSize;
-  //   inSize = outSize;
-  //   outSize = holder;
-
-  //   // Initialize and populate new data array
-
-  //   // assign new data array to data class member
-
-  //   // destroy old data array
-  // }
-
-  // TODO: slice, eigen, cholesky, rank, is_psd, etc..
-};
-
-void innerProduct(float* x, float* y, float* out, size_t dim)  {
-  // We pass in dim because sizeof(x) / sizeof(x[0]) doesn't work here..
-  // x is construed as the pointer pointing to x[0] in function scope
-  for (int i = 0; i < dim; i++) {
-    cout << "row element i " << x[i] << endl;
-    cout << "col element i " << y[i] << endl;
-    *out += x[i] * y[i]; 
-  }
-}
-
-void matMul(Matrix* A, Matrix* B, Matrix* out) {
-  if (A->outSize != B->inSize) {
-    throw "Invalid dimensions! Could not compute matrix product.";
-  }
-
-  size_t inDim = A->inSize;
-  size_t outDim = B->outSize;
-  size_t innerDim = A->outSize;
-  out->inSize = inDim;
-  out->outSize = outDim;
-  float row[A->outSize];
-  float col[B->inSize];
-
-  // Simple O(N^3) solution
-  for (int i = 0; i < inDim; i++) {
-    A->row(i, row);
-    for (int j = 0; j < outDim; j++) {
-      B->col(j, col);
-      cout << "row " << i << endl;
-      cout << "col " << j << endl;
-      innerProduct(row, col, out->get(i,j), innerDim);
-    }
-  }
-} 
+#include "Matrix.h"
+#include "Linalg.h"
 
 int main() {
   /************************************************/
@@ -87,8 +13,8 @@ int main() {
 
   innerProduct(a, b, &c, dim);
 
-  if (c == 7.2) {
-    cout << "innerProduct passes" << endl;
+  if (c-0.001 < 7.2 && c+0.001 > 7.2) {
+    std::cout << "innerProduct passes" << std::endl;
   } 
 
   /************************************************/
@@ -124,23 +50,23 @@ int main() {
   }
 
   if (passed) {
-    cout << "matMul passes" << endl;
+    std::cout << "matMul passes" << std::endl;
   } else {
-    cout << "matMul failed" << endl;
-    cout << "Expected: " << endl;
+    std::cout << "matMul failed" << std::endl;
+    std::cout << "Expected: " << std::endl;
     for (int i = 0; i < 2; i++) {
       for (int j = 0; j < 2; j++) {
-        cout << target[i][j] << ", ";
+        std::cout << target[i][j] << ", ";
       }
     }
-    cout << "" << endl;
-    cout << "Computed: " << endl;
+    std::cout << "" << std::endl;
+    std::cout << "Computed: " << std::endl;
     for (int i = 0; i < 2; i++) {
       for (int j = 0; j < 2; j++) {
-        cout << *(C->get(i,j)) << ", ";
+        std::cout << *(C->get(i,j)) << ", ";
       }
     }
-    cout << "" << endl;
+    std::cout << "" << std::endl;
   }
 
   delete A;
