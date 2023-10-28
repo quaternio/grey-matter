@@ -6,6 +6,7 @@
  * Date: 10/20/23
  */
 
+#include "Linalg.h"
 
 void innerProduct(float* x, float* y, float* out, size_t dim)  {
   // We pass in dim because sizeof(x) / sizeof(x[0]) doesn't work here..

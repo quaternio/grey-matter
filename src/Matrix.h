@@ -1,3 +1,5 @@
+#include <cstddef>
+
 #ifndef SRC_MATRIX_H
 #define SRC_MATRIX_H
 

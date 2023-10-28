@@ -1,3 +1,4 @@
+#include <cstddef>
 #include "Matrix.h"
 
 #ifndef SRC_LINALG_H
