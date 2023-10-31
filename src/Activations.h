@@ -1,6 +1,16 @@
+#include <cstddef>
+
 #ifndef SRC_ACTIVATIONS_H
 #define SRC_ACTIVATIONS_H
 
-// TODO: Implement ReLU
+class ReLU {
+private:
+  size_t _size;
+  float* _io_grad;
+
+public:
+  ReLU(size_t size);
+  void apply(float* input, float* output);
+};
 
 #endif
