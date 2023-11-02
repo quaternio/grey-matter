@@ -25,5 +25,18 @@ void ReLU::apply(float* input, float* output) {
     }
   }
 
-  // TODO: Populate _io_grad
+  // Populate the Jacobian
+  for (int i = 0; i < _size; i++) {
+    for (int j = 0; j < _size; j++) {
+      if (i != j) {
+        _io_grad[i][j] = 0;
+      } else {
+        if (output[i] > 0) {
+          _io_grad[i][j] = 1;
+        } else {
+          _io_grad[i][j] = 0;
+        }
+      }
+    } 
+  }
 }
