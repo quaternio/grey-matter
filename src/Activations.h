@@ -6,10 +6,11 @@
 class ReLU {
 private:
   size_t _size;
-  float* _io_grad;
+  float** _io_grad = new float*[_size];
 
 public:
   ReLU(size_t size);
+  ~ReLU();
   void apply(float* input, float* output);
 };
 

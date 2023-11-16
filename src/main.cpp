@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Matrix.h"
 #include "Linalg.h"
+#include "Activations.h"
 
 int main() {
   /************************************************/
@@ -72,6 +73,43 @@ int main() {
   delete A;
   delete B;
   delete C;
+
+  /************************************************/
+  // Activations Test
+  /************************************************/
+
+  ReLU* relu = new ReLU(4);
+
+  float reluIn[4] = {0.1, -0.4, 3.2, -12.0};
+  float reluOut[4];
+
+  float reluCorrect[4] = {0.1, 0, 3.2, 0};
+
+  relu->apply(reluIn, reluOut);
+
+  passed = true;
+
+  for (int i = 0; i < 4; i++) {
+    if (reluOut[i] != reluCorrect[i])
+        passed = false;
+  }
+
+  if (passed)
+      std::cout << "relu test passed" << std::endl;
+
+  std::cout << "relu in" << std::endl;
+  for (int i = 0; i < 4; i++) {
+    std::cout << reluIn[i] << ", "; 
+  }
+  std::cout << "" << std::endl;
+
+  std::cout << "relu out" << std::endl;
+  for (int i = 0; i < 4; i++) {
+    std::cout << reluOut[i] << ", "; 
+  }
+  std::cout << "" << std::endl;
+
+  delete relu;
   
   return 0;
 }

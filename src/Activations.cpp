@@ -4,16 +4,24 @@ ReLU::ReLU(size_t size) {
   _size = size; 
 
   // Initialize the gradient data
-  float io_grad [_size];
   for (int i=0; i<_size; i++) {
-    float row [_size];
-    io_grad[i] = row; 
+    float* row = new float[_size];
+    _io_grad[i] = row; 
     for (int j=0; j<_size; j++) {
-      io_grad[i][j] = 0.;
+      row[j] = 0.;
     }
+    delete [] row;
+  }
+}
+
+ReLU::~ReLU() {
+  // Free each sub-array
+  for (int i = 0; i < _size; i++) { 
+    delete [] _io_grad[i];
   }
 
-  _io_grad = io_grad;
+  // Free the array of pointers
+  delete [] _io_grad;
 }
 
 void ReLU::apply(float* input, float* output) {
