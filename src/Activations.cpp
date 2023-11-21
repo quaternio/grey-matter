@@ -48,3 +48,4 @@ void ReLU::apply(float* input, float* output) {
     } 
   }
 }
+

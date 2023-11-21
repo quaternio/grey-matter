@@ -85,6 +85,11 @@ int main() {
 
   float reluCorrect[4] = {0.1, 0, 3.2, 0};
 
+  float reluGradCorrect[4][4] = {{1., 0., 0., 0.}, 
+                                 {0., 0., 0., 0.}, 
+                                 {0., 0., 1., 0.}, 
+                                 {0., 0., 0., 0.}};
+
   relu->apply(reluIn, reluOut);
 
   passed = true;
@@ -94,8 +99,15 @@ int main() {
         passed = false;
   }
 
+  for (int i = 0; i < 4; i++) {
+    for (int j = 0; j < 4; j++) {
+      if (relu->io_grad(i,j) != reluGradCorrect[i][j])
+        passed = false;
+    }
+  }
+
   if (passed)
-      std::cout << "relu test passed" << std::endl;
+      std::cout << "relu test passes" << std::endl;
 
   std::cout << "relu in" << std::endl;
   for (int i = 0; i < 4; i++) {
@@ -108,6 +120,14 @@ int main() {
     std::cout << reluOut[i] << ", "; 
   }
   std::cout << "" << std::endl;
+
+  std::cout << "relu grad" << std::endl;
+  for (int i = 0; i < 4; i++) {
+    for (int j = 0; j < 4; j++) {
+      std::cout << relu->io_grad(i,j) << ", ";
+    }
+    std::cout << "" << std::endl;
+  }
 
   delete relu;
   
